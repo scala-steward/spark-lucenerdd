@@ -2,7 +2,7 @@ language: scala
 scala:
   - 2.11.12
 sudo: false
-dist: trusty
+dist: xenial
 cache:
   directories:
   - $HOME/.sbt/0.13/dependency
@@ -16,13 +16,29 @@ before_cache:
   - find $HOME/.ivy2/cache -name "ivydata-*.properties" -type f -delete
 matrix:
   include:
-    - jdk: oraclejdk8
+    - jdk: openjdk8
+      env: LUCENERDD_ANALYZER_NAME="en" LUCENERDD_LINKER_METHOD="cartesian"
+    - jdk: openjdk10
+      env: LUCENERDD_ANALYZER_NAME="en" LUCENERDD_LINKER_METHOD="cartesian"
+    - jdk: openjdk11
       env: LUCENERDD_ANALYZER_NAME="en" LUCENERDD_LINKER_METHOD="cartesian"
     - jdk: openjdk8
       env: LUCENERDD_ANALYZER_NAME="en" LUCENERDD_LINKER_METHOD="collectbroadcast"
+    - jdk: openjdk10
+      env: LUCENERDD_ANALYZER_NAME="en" LUCENERDD_LINKER_METHOD="collectbroadcast"
+    - jdk: openjdk11
+      env: LUCENERDD_ANALYZER_NAME="en" LUCENERDD_LINKER_METHOD="collectbroadcast"
     - jdk: openjdk8
       env: LUCENERDD_ANALYZER_NAME="whitespace" LUCENERDD_LINKER_METHOD="cartesian"
-    - jdk: oraclejdk8
+    - jdk: openjdk10
+      env: LUCENERDD_ANALYZER_NAME="whitespace" LUCENERDD_LINKER_METHOD="cartesian"
+    - jdk: openjdk11
+      env: LUCENERDD_ANALYZER_NAME="whitespace" LUCENERDD_LINKER_METHOD="cartesian"
+    - jdk: openjdk8
+      env: LUCENERDD_ANALYZER_NAME="whitespace" LUCENERDD_LINKER_METHOD="collectbroadcast"
+    - jdk: openjdk10
+      env: LUCENERDD_ANALYZER_NAME="whitespace" LUCENERDD_LINKER_METHOD="collectbroadcast"
+    - jdk: openjdk11
       env: LUCENERDD_ANALYZER_NAME="whitespace" LUCENERDD_LINKER_METHOD="collectbroadcast"
 script:
   - sbt ++$TRAVIS_SCALA_VERSION -Dlucenerdd.spatial.linker.method=${LUCENE_SPATIAL_LINKER_METHOD} clean update test
